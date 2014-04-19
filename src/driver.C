@@ -3,14 +3,16 @@
 #include <cstdio>
 #include <cassert>
 #include "bitop.h"
-//#include "bitop-opt.h"
+#include "bitop-opt.h"
 #include "timing.h"
+#include <cstdlib>
+#include <cstring>
 
 using namespace std;
 
 void (*extract_function)(size_t, size_t, unsigned long *, std::vector<size_t>&);
 
-int main()
+int main(int argc, char *argv[])
 {
     FILE *pFile;
     size_t b, e;
@@ -19,8 +21,23 @@ int main()
     unsigned long long cycles = 0, count = 0;
     const size_t ULONG_BITS = sizeof(unsigned long) * 8;
 
+    if(argc != 2)
+    {
+        std::cout << "Usage: " << argv[0] << " [0] baseline [1] builtin>"<< std::endl;
+        exit(0);
+    }   
+
     // Set the function to call based on command line argument
-    extract_function = extract_bits;
+    switch(atoi(argv[1]))
+    {
+        default:
+        case 0:
+            extract_function = extract_bits;
+            break;
+        case 1:
+            extract_function = extract_bits_with_builtin;
+            break;
+    }
 
     pFile = fopen("extract_bits.bin","rb");
     while( 1 == fread(&b, sizeof(size_t), 1, pFile) )

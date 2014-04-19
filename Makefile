@@ -9,7 +9,7 @@ LD_FLAG=
 
 
 vpath %.C src
-SRCS = driver.C bitop.C 
+SRCS = driver.C bitop.C bitop-opt.C
 OBJS = $(patsubst %.C,obj/%.o,$(SRCS)) 
 
 all: bench

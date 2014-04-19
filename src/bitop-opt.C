@@ -2,12 +2,6 @@
 #include "bitop.h"
 
 
-/*******************************************************************/
-/*                                                                 */
-/*  extract_bits                                                   */
-/*                                                                 */
-/*******************************************************************/
-
 void extract_bits_with_builtin(size_t b, size_t e, unsigned long *bitvec, vector<size_t> &m)
 {
     assert( b<=e );
