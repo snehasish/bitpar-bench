@@ -21,8 +21,7 @@ obj:
 	@mkdir -p $@
 
 obj/%.o : %.C
-	@echo $< 
-	@$(CXX) $(CXX_FLAG) $(OPT_FLAG) -c $< -o $@
+	$(CXX) $(CXX_FLAG) $(OPT_FLAG) -c $< -o $@
 
 bench : $(OBJS) 
 	$(CXX) $(OPT_FLAG) $(LD_FLAG) $^ -o $(BIN_DIR)/$@ 
