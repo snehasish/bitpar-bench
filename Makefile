@@ -3,7 +3,7 @@ BIN_DIR=bin
 SRC_DIR=src
 INC_DIR=include
 
-CXX_FLAG=-I$(INC_DIR) 
+CXX_FLAG=-I$(INC_DIR) -mavx
 OPT_FLAG=-O3
 LD_FLAG=
 

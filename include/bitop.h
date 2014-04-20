@@ -13,7 +13,9 @@
 #include <vector>
 using std::vector;
 
-const size_t ULONG_BITS = sizeof(unsigned long) * 8;
+#ifndef ULONG_BITS
+#define ULONG_BITS 64 
+#endif
 
 inline size_t bitarray_size( size_t n ) {
   return (n + ULONG_BITS - 1) / ULONG_BITS;

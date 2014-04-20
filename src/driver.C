@@ -21,7 +21,6 @@ int main(int argc, char *argv[])
     std::vector<size_t> m;
     unsigned long *bitvec = NULL;
     unsigned long long cycles = 0, count = 0;
-    const size_t ULONG_BITS = sizeof(unsigned long) * 8;
 
     if(argc != 2)
     {
@@ -38,6 +37,9 @@ int main(int argc, char *argv[])
             break;
         case 1:
             extract_function = extract_bits_with_builtin;
+            break;
+        case 2:
+            extract_function = extract_bits_with_avx_check;
             break;
     }
 
