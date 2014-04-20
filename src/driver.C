@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <map>
+#include <memory>
 
 using namespace std;
 
@@ -21,9 +22,6 @@ int main(int argc, char *argv[])
     unsigned long *bitvec = NULL;
     unsigned long long cycles = 0, count = 0;
     const size_t ULONG_BITS = sizeof(unsigned long) * 8;
-    // Analyses 
-    std::map<int,unsigned long long> bitvec_vals; 
-    unsigned long long sum = 0;
 
     if(argc != 2)
     {
@@ -48,33 +46,20 @@ int main(int argc, char *argv[])
     {
         assert(fread(&e, sizeof(size_t), 1, pFile) && "Unable to read file");
         size_t l = (e - b + ULONG_BITS - 1) / ULONG_BITS;
-        bitvec = (unsigned long*)malloc(sizeof(unsigned long)*l);
+        posix_memalign((void **) &bitvec, 32, sizeof(unsigned long long)*l );
         assert(fread(bitvec, sizeof(unsigned long), l, pFile) && "Unable to read file");
-
-        for(unsigned i = 0; i < l; i++)
-        {
-            int x = __builtin_popcount(bitvec[i]);
-            sum +=1;
-            if(bitvec_vals.count(x) == 0)
-                bitvec_vals.insert(std::make_pair(x,1));
-            else
-                bitvec_vals[x]++;
-        }
-            
         
-        //reset_and_start_timer();
-        //extract_function(b, e, bitvec, m);
-        //cycles += get_elapsed_cycles(); 
+        reset_and_start_timer();
+        extract_function(b, e, bitvec, m);
+        cycles += get_elapsed_cycles(); 
         
         count++;
         free(bitvec);
     }
 
     // Print stats
-    //std::cout << double(cycles)/count << " cycles/invocation" << std::endl;
+    std::cout << double(cycles)/count << " cycles/invocation" << std::endl;
     
-    for(std::map<int,unsigned long long>::iterator it = bitvec_vals.begin(); it != bitvec_vals.end(); it++)
-        std::cout << it->first << " : " << it->second << " : " << double(it->second)/sum*100 << std::endl;
 
     fclose(pFile);
     return 0;
