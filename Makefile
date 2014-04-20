@@ -3,16 +3,15 @@ BIN_DIR=bin
 SRC_DIR=src
 INC_DIR=include
 
-CXX_FLAG=-Iinclude
+CXX_FLAG=-I$(INC_DIR)
 OPT_FLAG=-O3
 LD_FLAG=
 
-
 vpath %.C src
-SRCS = driver.C bitop.C bitop-opt.C
+SRCS = bitop.C bitop-opt.C 
 OBJS = $(patsubst %.C,obj/%.o,$(SRCS)) 
 
-all: bench
+all: bench analyses
 .PHONY: clean
 
 $(OBJS): | obj
@@ -23,8 +22,11 @@ obj:
 obj/%.o : %.C
 	$(CXX) $(CXX_FLAG) $(OPT_FLAG) -c $< -o $@
 
-bench : $(OBJS) 
-	$(CXX) $(OPT_FLAG) $(LD_FLAG) $^ -o $(BIN_DIR)/$@ 
+bench : $(OBJS) obj/driver.o 
+	$(CXX) $(CXX_FLAG) $(OPT_FLAG) $(LD_FLAG) $^ -o $(BIN_DIR)/$@ 
+
+analyses : $(OBJS) obj/driver-analyses.o 
+	$(CXX) $(CXX_FLAG) $(OPT_FLAG) $(LD_FLAG) $^ -o $(BIN_DIR)/$@ 
 
 clean:
 	rm -f bin/bench obj/*

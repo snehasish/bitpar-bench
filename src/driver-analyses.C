@@ -2,16 +2,11 @@
 #include <vector>
 #include <cstdio>
 #include <cassert>
-#include "bitop.h"
-#include "bitop-opt.h"
-#include "timing.h"
 #include <cstdlib>
 #include <cstring>
 #include <map>
 
 using namespace std;
-
-void (*extract_function)(size_t, size_t, unsigned long *, std::vector<size_t>&);
 
 int main(int argc, char *argv[])
 {
@@ -24,25 +19,7 @@ int main(int argc, char *argv[])
     // Analyses 
     std::map<int,unsigned long long> bitvec_vals; 
     unsigned long long sum = 0;
-
-    if(argc != 2)
-    {
-        std::cout << "Usage: " << argv[0] << " [0] baseline [1] builtin>"<< std::endl;
-        exit(0);
-    }   
-
-    // Set the function to call based on command line argument
-    switch(atoi(argv[1]))
-    {
-        default:
-        case 0:
-            extract_function = extract_bits;
-            break;
-        case 1:
-            extract_function = extract_bits_with_builtin;
-            break;
-    }
-
+    
     pFile = fopen("extract_bits.bin","rb");
     while( 1 == fread(&b, sizeof(size_t), 1, pFile) )
     {
@@ -60,18 +37,11 @@ int main(int argc, char *argv[])
             else
                 bitvec_vals[x]++;
         }
-            
-        
-        //reset_and_start_timer();
-        //extract_function(b, e, bitvec, m);
-        //cycles += get_elapsed_cycles(); 
         
         count++;
         free(bitvec);
     }
 
-    // Print stats
-    //std::cout << double(cycles)/count << " cycles/invocation" << std::endl;
     
     for(std::map<int,unsigned long long>::iterator it = bitvec_vals.begin(); it != bitvec_vals.end(); it++)
         std::cout << it->first << " : " << it->second << " : " << double(it->second)/sum*100 << std::endl;
