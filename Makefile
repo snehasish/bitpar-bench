@@ -1,4 +1,4 @@
-CXX=g++
+CXX=g++-4.8
 BIN_DIR=bin
 SRC_DIR=src
 INC_DIR=include

@@ -15,7 +15,7 @@ void (*extract_function)(size_t, size_t, unsigned long *, std::vector<size_t>&);
 int main(int argc, char *argv[])
 {
     FILE *pFile;
-    size_t b, e;
+    size_t b, e, m_size;
     std::vector<size_t> m;
     unsigned long *bitvec = NULL;
     unsigned long long cycles = 0, count = 0;
